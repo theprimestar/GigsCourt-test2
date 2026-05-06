@@ -92,10 +92,10 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-      setState(() => _error = _getErrorMessage(e));
+      setState(() => _error = 'Firebase: ${e.code} - ${e.message}');
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.toString());
+      setState(() => _error = 'Error: ${e.toString()}');
     } finally {
       if (mounted) setState(() => _loading = false);
     }
