@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/supabase_config.dart';
 import 'screens/auth_screen.dart';
 import 'screens/verify_email_screen.dart';
 
@@ -12,6 +14,16 @@ void main() async {
     await Firebase.initializeApp();
   } catch (e) {
     runApp(ErrorApp(error: e.toString()));
+    return;
+  }
+
+  try {
+    await Supabase.initialize(
+      url: SupabaseConfig.url,
+      anonKey: SupabaseConfig.anonKey,
+    );
+  } catch (e) {
+    runApp(ErrorApp(error: 'Supabase Error:\n$e'));
     return;
   }
 
@@ -32,7 +44,7 @@ class ErrorApp extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(24),
             child: Text(
-              'Firebase Error:\n$error',
+              '$error',
               style: const TextStyle(color: Colors.white, fontSize: 14),
               textAlign: TextAlign.center,
             ),
@@ -60,7 +72,6 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
   }
 
   Future<void> _checkAuthState() async {
-    // Show splash for at least 1.5 seconds
     await Future.delayed(const Duration(milliseconds: 1500));
 
     if (!mounted) return;
@@ -110,7 +121,6 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
           onBack: () => setState(() => _screen = 'auth'),
         );
       case 'home':
-        // Placeholder until we build HomeScreen
         return Scaffold(
           backgroundColor: Theme.of(context).brightness == Brightness.dark
               ? Colors.black
