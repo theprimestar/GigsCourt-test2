@@ -25,9 +25,18 @@ jobs:
 
       - name: Build unsigned IPA
         run: |
-          flutter build ipa --no-codesign --release
+          cd ios
+          xcodebuild clean archive \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath ../build/ios/Runner.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+          cd ..
           mkdir -p Payload
-          cp -r build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app Payload/
+          cp -r build/ios/Runner.xcarchive/Products/Applications/Runner.app Payload/
           mkdir -p build/ios/ipa
           zip -r build/ios/ipa/GigsCourt.ipa Payload/
           rm -rf Payload
