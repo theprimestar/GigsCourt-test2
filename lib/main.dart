@@ -109,7 +109,6 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
           onVerified: () => setState(() => _screen = 'home'),
           onBack: () => setState(() => _screen = 'auth'),
         );
-        );
       case 'home':
         // Placeholder until we build HomeScreen
         return Scaffold(
