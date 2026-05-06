@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/auth_screen.dart';
+import 'screens/verify_email_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,14 +105,10 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
           onVerifyEmail: () => setState(() => _screen = 'verify'),
         );
       case 'verify':
-        // Placeholder until we build VerifyEmailScreen
-        return Scaffold(
-          backgroundColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.black
-              : const Color(0xFFF7F6F4),
-          body: const Center(
-            child: Text('Verify Email Screen — Coming Soon'),
-          ),
+        return VerifyEmailScreen(
+          onVerified: () => setState(() => _screen = 'home'),
+          onBack: () => setState(() => _screen = 'auth'),
+        );
         );
       case 'home':
         // Placeholder until we build HomeScreen
