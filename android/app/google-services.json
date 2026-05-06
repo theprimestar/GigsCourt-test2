@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590983642327",
+    "project_id": "the-gigscourt-project",
+    "storage_bucket": "the-gigscourt-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590983642327:android:ad6376e876c6b60b158492",
+        "android_client_info": {
+          "package_name": "com.gigscourt.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdoJ005Y7xO3BRRZePd8AAHPiKoly8F2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
