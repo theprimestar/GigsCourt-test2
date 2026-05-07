@@ -8,7 +8,6 @@ class ImageKitService {
     required String fileName,
     required String folder,
   }) async {
-    // Get auth token from Supabase edge function
     final authResponse =
         await http.get(Uri.parse(ImageKitConfig.authEndpoint));
 
@@ -18,7 +17,6 @@ class ImageKitService {
 
     final authData = jsonDecode(authResponse.body);
 
-    // Upload to ImageKit
     final uploadRequest = http.MultipartRequest(
       'POST',
       Uri.parse('https://upload.imagekit.io/api/v1/files/upload'),
@@ -45,5 +43,15 @@ class ImageKitService {
     }
 
     return result['url'] as String;
+  }
+
+  String getOptimizedUrl(String url, {int width = 300, int quality = 75}) {
+    final base = url.split('?').first;
+    return '$base?tr=f-webp,fo-auto,w-$width,q-$quality';
+  }
+
+  String getFullSizeUrl(String url) {
+    final base = url.split('?').first;
+    return '$base?tr=f-webp,fo-auto';
   }
 }
