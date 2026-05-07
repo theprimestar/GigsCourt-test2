@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'config/supabase_config.dart';
 import 'screens/auth_screen.dart';
 import 'screens/verify_email_screen.dart';
+import 'screens/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,9 +100,10 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
 
     if (!freshUser.emailVerified) {
       setState(() => _screen = 'verify');
-    } else {
-      setState(() => _screen = 'home');
+      return;
     }
+
+    setState(() => _screen = 'onboarding');
   }
 
   @override
@@ -125,6 +127,10 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
         return VerifyEmailScreen(
           onVerified: () => setState(() => _screen = 'home'),
           onBack: () => setState(() => _screen = 'auth'),
+        );
+      case 'onboarding':
+        return OnboardingScreen(
+          onComplete: () => setState(() => _screen = 'home'),
         );
       case 'home':
         return Scaffold(
