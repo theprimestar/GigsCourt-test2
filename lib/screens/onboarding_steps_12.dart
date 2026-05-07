@@ -275,16 +275,31 @@ class _StepLocationState extends State<StepLocation> {
   Future<void> _getCurrentLocation() async {
     setState(() { _loadingLocation = true; _geoError = false; });
     try {
-      final defaultPos = LatLng(9.0765, 7.3986);
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          setState(() { _geoError = true; _loadingLocation = false; });
+          return;
+        }
+      }
+      if (permission == LocationPermission.deniedForever) {
+        setState(() { _geoError = true; _loadingLocation = false; });
+        return;
+      }
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      if (!mounted) return;
       setState(() {
-        _currentPosition = defaultPos;
-        _lat = defaultPos.latitude;
-        _lng = defaultPos.longitude;
-        _addressController.text = 'Abuja, Nigeria';
+        _currentPosition = LatLng(position.latitude, position.longitude);
+        _lat = position.latitude;
+        _lng = position.longitude;
         _loadingLocation = false;
       });
+      _reverseGeocode(LatLng(position.latitude, position.longitude));
     } catch (e) {
-      setState(() { _geoError = true; _loadingLocation = false; });
+      if (mounted) setState(() { _geoError = true; _loadingLocation = false; });
     }
   }
 
