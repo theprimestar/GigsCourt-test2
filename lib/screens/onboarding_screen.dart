@@ -72,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(kDebugMode ? e.toString() : 'Something went wrong. Please try again.')),
+          SnackBar(content: Text(e.toString())),
         );
       }
     }
