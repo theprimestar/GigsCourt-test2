@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../features/auth/data/firebase_auth_repository.dart';
+import '../services/firebase_auth_repository.dart';
 
 class AuthScreen extends StatefulWidget {
   final VoidCallback onAuthenticated;
