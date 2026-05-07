@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SupabaseService {
   final SupabaseClient _client = Supabase.instance.client;
@@ -31,12 +34,28 @@ class SupabaseService {
     required double lng,
     required String address,
   }) async {
-    await _client.from('profiles').upsert({
-      'id': userId,
-      'workspace_lat': lat,
-      'workspace_lng': lng,
-      'workspace_address': address,
-      'updated_at': DateTime.now().toIso8601String(),
-    });
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) throw Exception('Not authenticated');
+
+    final idToken = await user.getIdToken(false);
+    if (idToken == null) throw Exception('Failed to get ID token');
+
+    final response = await http.post(
+      Uri.parse('https://paohowngwtpffbdxxije.supabase.co/functions/v1/save-profile-location'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $idToken',
+      },
+      body: jsonEncode({
+        'lat': lat,
+        'lng': lng,
+        'address': address,
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      final error = jsonDecode(response.body);
+      throw Exception(error['error'] ?? 'Failed to save location');
+    }
   }
 }
