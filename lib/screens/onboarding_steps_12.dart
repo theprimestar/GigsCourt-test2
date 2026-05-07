@@ -333,7 +333,7 @@ class _StepLocationState extends State<StepLocation> {
         Container(
           height: 280,
           width: double.infinity,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), border: Border.all(color: isDark ? Colors.white10 : const Color(0xFFE5E5EA)), overflow: BoxFit.cover.clipAntiAlias),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), border: Border.all(color: isDark ? Colors.white10 : const Color(0xFFE5E5EA))),
           child: _loadingLocation
               ? Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [const SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF3B5FE3))), const SizedBox(height: 12), Text('Getting your location...', style: TextStyle(fontSize: 13, color: isDark ? Colors.white38 : Colors.black38))]))
               : _geoError
