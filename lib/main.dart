@@ -7,6 +7,7 @@ import 'config/supabase_config.dart';
 import 'screens/auth_screen.dart';
 import 'screens/verify_email_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -133,14 +134,7 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
           onComplete: () => setState(() => _screen = 'home'),
         );
       case 'home':
-        return Scaffold(
-          backgroundColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.black
-              : const Color(0xFFF7F6F4),
-          body: const Center(
-            child: Text('Home Screen — Coming Soon'),
-          ),
-        );
+        return const HomeScreen();
       default:
         return const SplashScreen();
     }
