@@ -131,7 +131,6 @@ class _StepNameServicesState extends State<StepNameServices> {
         const SizedBox(height: 6),
         Text('This helps clients find you', style: TextStyle(fontSize: 15, color: isDark ? const Color(0xFF98989D) : const Color(0xFF6E6E73))),
         const SizedBox(height: 28),
-        // Name label
         Text('Full Name / Business Name', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: isDark ? const Color(0xFF98989D) : const Color(0xFF6E6E73))),
         const SizedBox(height: 8),
         TextField(
@@ -147,7 +146,6 @@ class _StepNameServicesState extends State<StepNameServices> {
           ),
         ),
         const SizedBox(height: 28),
-        // Services label
         Text('What services do you offer?', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: isDark ? const Color(0xFF98989D) : const Color(0xFF6E6E73))),
         const SizedBox(height: 8),
         if (_selectedSlugs.isNotEmpty) ...[
@@ -324,22 +322,6 @@ class _StepLocationState extends State<StepLocation> {
     } catch (_) {}
   }
 
-  void _onMapMoved(MapPosition position, bool hasGesture) {
-    if (!hasGesture) return;
-    final center = _mapController.camera.center;
-    setState(() {
-      _currentPosition = center;
-      _lat = center.latitude;
-      _lng = center.longitude;
-    });
-  }
-
-  void _onMapDragEnd() {
-    if (_currentPosition != null) {
-      _reverseGeocode(_currentPosition!);
-    }
-  }
-
   void _handleContinue() {
     final address = _addressController.text.trim();
     if (address.isEmpty) { setState(() => _error = 'Please enter your workspace address.'); return; }
@@ -384,11 +366,14 @@ class _StepLocationState extends State<StepLocation> {
                               initialCenter: _currentPosition ?? const LatLng(9.0765, 7.3986),
                               initialZoom: 15.0,
                               onMapEvent: (event) {
-                                if (event is MapEventMove) {
-                                  _onMapMoved(event.mapPosition, event is MapEventDrag);
-                                }
                                 if (event is MapEventMoveEnd) {
-                                  _onMapDragEnd();
+                                  final center = _mapController.camera.center;
+                                  setState(() {
+                                    _currentPosition = center;
+                                    _lat = center.latitude;
+                                    _lng = center.longitude;
+                                  });
+                                  _reverseGeocode(center);
                                 }
                               },
                             ),
@@ -416,6 +401,8 @@ class _StepLocationState extends State<StepLocation> {
           style: TextButton.styleFrom(foregroundColor: const Color(0xFF3B5FE3)),
         )),
         const SizedBox(height: 20),
+        Text('Workspace Address', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: isDark ? const Color(0xFF98989D) : const Color(0xFF6E6E73))),
+        const SizedBox(height: 8),
         TextField(
           controller: _addressController, minLines: 2, maxLines: 3,
           style: TextStyle(fontSize: 16, color: isDark ? const Color(0xFFF5F5F7) : const Color(0xFF1A1A1A)),
