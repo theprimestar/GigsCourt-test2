@@ -8,6 +8,7 @@ import 'screens/auth_screen.dart';
 import 'screens/verify_email_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/home_screen.dart';
+import 'services/firestore_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,7 +105,17 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
       return;
     }
 
-    setState(() => _screen = 'onboarding');
+    try {
+      final firestoreService = FirestoreService();
+      final profile = await firestoreService.getProfileById(freshUser.uid);
+      final onboardingCompleted = profile?['onboarding_completed'] == true;
+
+      if (mounted) {
+        setState(() => _screen = onboardingCompleted ? 'home' : 'onboarding');
+      }
+    } catch (e) {
+      if (mounted) setState(() => _screen = 'onboarding');
+    }
   }
 
   @override
@@ -134,7 +145,12 @@ class _GigsCourtAppState extends State<GigsCourtApp> {
           onComplete: () => setState(() => _screen = 'home'),
         );
       case 'home':
-        return const HomeScreen();
+        return HomeScreen(
+          onLogout: () async {
+            await FirebaseAuth.instance.signOut();
+            setState(() => _screen = 'auth');
+          },
+        );
       default:
         return const SplashScreen();
     }
